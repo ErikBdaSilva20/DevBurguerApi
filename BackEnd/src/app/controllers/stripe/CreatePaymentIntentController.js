@@ -14,6 +14,7 @@ class CreatePaymentIntentController {
   async store(request, response) {
     const schema = Yup.object().shape({
       products: Yup.array()
+        .min(1, 'O carrinho não pode estar vazio')
         .required()
         .of(
           Yup.object({

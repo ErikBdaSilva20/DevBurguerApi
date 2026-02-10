@@ -3,7 +3,7 @@ export * from './Home';
 export * from './Login';
 export * from './Menu';
 export * from './NotFound';
-export * from './NotFound/index.jsx';
 export * from './Register';
 export * from './CompletePayment';
 export * from './Checkout';
+export * from './Admin';

@@ -48,7 +48,7 @@ class UserController {
         name: Yup.string().required(),
         email: Yup.string().email().required(),
         password: Yup.string().min(6).max(50).required(),
-        admin: Yup.boolean(),
+        admin: Yup.boolean().default(false),
       });
 
       if (!req.body) {

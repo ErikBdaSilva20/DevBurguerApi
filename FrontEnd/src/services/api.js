@@ -8,11 +8,11 @@ export default api;
 //Alterar em produção
 
 api.interceptors.request.use((config) => {
-  const userData = localStorage.getItem('account:userData');
+  const userData = localStorage.getItem('devburguer:userData');
 
   const token = userData ? JSON.parse(userData).token : null;
 
-  if (userData) {
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
 

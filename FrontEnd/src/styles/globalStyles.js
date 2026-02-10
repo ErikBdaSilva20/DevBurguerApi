@@ -6,14 +6,14 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
     padding: 0; 
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: ${({ theme }) => theme.fonts.poppins};
     font-style: italic;
     outline: none;
   }
 
   body {
-    background-color: #0f172a;
-    color: #f8fafc;
+    background-color: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.white};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

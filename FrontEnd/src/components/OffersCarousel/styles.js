@@ -15,18 +15,18 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.h2`
-  font-size: 5rem;
+  font-size: 3.5rem;
   font-weight: 400;
   text-align: center;
-  color: #ffc400;
+  color: ${({ theme }) => theme.primary};
   margin-bottom: 40px;
   position: relative;
-  font-family: 'road rage', sans-serif;
+  font-family: ${({ theme }) => theme.fonts.roadRage};
 
   span {
     font-weight: 700;
-    color: #ffffff;
-    font-family: 'road rage', sans-serif;
+    font-family: ${({ theme }) => theme.fonts.roadRage};
+    color: ${({ theme }) => theme.white};
   }
 
   &::after {
@@ -37,7 +37,7 @@ export const Title = styled.h2`
     transform: translateX(-50%);
     width: 40px;
     height: 3px;
-    background-color: #ffc400;
+    background-color: ${({ theme }) => theme.primary};
     border-radius: 2px;
   }
 `;

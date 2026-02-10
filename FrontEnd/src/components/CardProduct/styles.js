@@ -9,16 +9,15 @@ export const Container = styled.div`
   margin-top: 15px;
   min-height: 320px;
   padding: 16px;
-  background-color: #000000ce;
+  background-color: rgba(0, 0, 0, 0.82);
   cursor: pointer;
 
-  border: 2px solid gold;
+  border: 2px solid ${({ theme }) => theme.primary};
   border-radius: 12px;
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
   &:hover {
-    transform: translateY(-6px);
     transform: scale(1.04);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
   }
@@ -29,17 +28,18 @@ export const Container = styled.div`
 
     margin-top: auto;
     padding: 8px 24px;
-    border: 1px solid gold;
+    border: 1px solid ${({ theme }) => theme.primary};
     border-radius: 4px;
-    background-color: #ffbb008a;
-    color: #ffffff;
+    background-color: ${({ theme }) => theme.primary}33;
+    color: ${({ theme }) => theme.white};
     font-size: 25px;
     font-weight: 600;
     cursor: pointer;
     transition: filter 0.25s ease;
 
     &:hover {
-      filter: brightness(0.9);
+      filter: brightness(1.1);
+      background-color: ${({ theme }) => theme.primary};
     }
   }
 `;
@@ -66,18 +66,17 @@ export const ContainerItems = styled.div`
   p {
     font-size: 24px;
     font-weight: 600;
-    color: #ffffff;
+    color: ${({ theme }) => theme.white};
     text-align: start;
-
     width: 90%;
   }
 
   strong {
     font-size: 26px;
-    color: #ffffff;
+    color: ${({ theme }) => theme.white};
     width: 90%;
     text-align: start;
-    text-shadow: 0px 4px 6px rgb(255, 166, 0);
-    font-family: 'UnifrakturCook', cursive;
+    text-shadow: 0px 4px 6px ${({ theme }) => theme.secondary};
+    font-family: ${({ theme }) => theme.fonts.unifraktur};
   }
 `;

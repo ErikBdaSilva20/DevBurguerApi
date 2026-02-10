@@ -5,7 +5,6 @@ import BannerImg from '../../assets/bannerMenu.jpg';
 export const Container = styled.div`
   min-height: 100vh;
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${containerBackground});
-
   padding-bottom: 5px;
 `;
 
@@ -13,7 +12,6 @@ export const Banner = styled.section`
   position: relative;
   height: 480px;
   width: 100%;
-
   background:
     linear-gradient(to right, rgba(0, 0, 0, 0.37), rgba(0, 0, 0, 0.14)), url(${BannerImg});
   background-size: cover;
@@ -22,10 +20,8 @@ export const Banner = styled.section`
   display: flex;
   align-items: center;
   justify-content: space-around;
+  color: ${({ theme }) => theme.white};
 
-  color: #ffffff;
-
-  /* ===== Conteúdo interno ===== */
   > div {
     max-width: 420px;
   }
@@ -35,7 +31,7 @@ export const Banner = styled.section`
     font-weight: 500;
     line-height: 1.1;
     margin-bottom: 16px;
-    font-family: 'road rage', sans-serif;
+    font-family: ${({ theme }) => theme.fonts.roadRage};
   }
 
   span {
@@ -43,7 +39,6 @@ export const Banner = styled.section`
     opacity: 0.9;
   }
 
-  /* ===== Mobile ===== */
   @media (max-width: 768px) {
     height: 420px;
     flex-direction: column;
@@ -57,7 +52,7 @@ export const Banner = styled.section`
     }
 
     h1 {
-      font-size: 30px;
+      font-size: 40px;
     }
 
     span {
@@ -69,36 +64,42 @@ export const Banner = styled.section`
 export const CategoriesMenu = styled.div`
   display: flex;
   justify-content: center;
-
   margin: 50px auto;
   padding: 40px;
   max-width: 1280px;
   gap: 60px;
+
+  @media (max-width: 768px) {
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+  }
 `;
 
 export const CategorieButton = styled.button`
   text-decoration: none;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  color: #808080;
+  color: ${({ theme }) => theme.darkGray};
   font-size: 25px;
   font-weight: bold;
   padding-bottom: 10px;
-
   background: none;
   border: none;
-
-  border-bottom: ${(props) => props.$isActiveCategory && '3px solid gold'};
-  color: ${(props) => props.$isActiveCategory && 'gold'};
+  border-bottom: ${(props) => props.$isActiveCategory && `3px solid ${props.theme.primary}`};
+  color: ${(props) => props.$isActiveCategory && props.theme.primary};
 
   &:hover {
     transform: scale(1.1);
+    color: ${({ theme }) => theme.primary};
+  }
+
+  @media (max-width: 768px) {
+    font-size: 18px;
   }
 `;
 
@@ -106,16 +107,16 @@ export const ProductsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   justify-content: center;
-
   margin: 50px auto;
   padding: 40px;
   max-width: 1280px;
   gap: 60px;
-  .menuImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
 
-    border-radius: 8px;
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
   }
 `;

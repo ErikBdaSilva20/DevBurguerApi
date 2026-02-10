@@ -1,30 +1,44 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import api from '../services/api';
 
 const UserContext = createContext(null);
 
 export function UserProvider({ children }) {
   const [userInfo, setUserInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  async function loadUser() {
+    try {
+      const { data } = await api.get('/session-verify');
+      setUserInfo(data);
+    } catch {
+      setUserInfo(null);
+      localStorage.removeItem('devburguer:userData');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('account:userData');
-
-    if (storedUser) {
-      setUserInfo(JSON.parse(storedUser));
+    const storedUserData = localStorage.getItem('devburguer:userData');
+    if (storedUserData) {
+      setUserInfo(JSON.parse(storedUserData));
     }
+    loadUser();
   }, []);
 
-  function putUserData(userData) {
-    setUserInfo(userData);
-    localStorage.setItem('account:userData', JSON.stringify(userData));
+  function putUserData(user) {
+    setUserInfo(user);
+    localStorage.setItem('devburguer:userData', JSON.stringify(user));
   }
 
   function logout() {
     setUserInfo(null);
-    localStorage.removeItem('account:userData');
+    localStorage.removeItem('devburguer:userData');
   }
 
   return (
-    <UserContext.Provider value={{ userInfo, putUserData, logout }}>
+    <UserContext.Provider value={{ userInfo, loading, putUserData, logout }}>
       {children}
     </UserContext.Provider>
   );

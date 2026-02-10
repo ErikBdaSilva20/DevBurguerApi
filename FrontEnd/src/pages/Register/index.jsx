@@ -4,8 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import BeerBurguerLogo from '../../assets/BeerBurguerLogo.png';
+import abstractBackground from '../../assets/abstractBackground.jpg';
+import formBackground from '../../assets/formBackground.jpg';
 import { Button } from '../../components/Button';
 import api from '../../services/api.js';
+
 import {
   Container,
   ContainerInputs,
@@ -67,12 +70,14 @@ export function Register() {
 
   return (
     <Container>
-      <LeftContainer>
+      <LeftContainer $background={abstractBackground}>
         <img src={BeerBurguerLogo} alt="Logo do estabelecimento" className="Logo" />
       </LeftContainer>
 
-      <RightContainer>
-        <Title>Crie sua conta!</Title>
+      <RightContainer $background={formBackground}>
+        <Title>
+          Crie sua <span>conta!</span>
+        </Title>
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <ContainerInputs>

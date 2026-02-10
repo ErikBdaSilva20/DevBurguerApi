@@ -1,7 +1,7 @@
 import { useUser } from '../../hooks/userContext.jsx';
 import { Banner, Container, Content, Main } from './styles.js';
 
-import { CategoriesCarousel, Header, OffersCarousel } from '../../components';
+import { CategoriesCarousel, OffersCarousel } from '../../components';
 
 export function Home() {
   const { userInfo } = useUser();
@@ -10,13 +10,12 @@ export function Home() {
 
   return (
     <>
-      <Header />
       <Main>
         <Banner>
           <h1>
             Seja bem-vindo(a)! <br />
-            <p>Vai de podrão? ou de breja?</p>
           </h1>
+          <p>Vai de podrão? ou de breja?</p>
         </Banner>
 
         <Container>

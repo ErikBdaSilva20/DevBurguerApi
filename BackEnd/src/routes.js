@@ -4,11 +4,11 @@ import CategoryController from './app/controllers/categoryController.js';
 import OrderController from './app/controllers/orderController.js';
 import ProductController from './app/controllers/productController.js';
 import SessionController from './app/controllers/sessionController.js';
+import CreatePaymentIntentController from './app/controllers/stripe/CreatePaymentIntentController.js';
 import UserController from './app/controllers/userController.js';
 import adminMiddleware from './app/middlewares/admin.js';
 import authMiddleware from './app/middlewares/auth.js';
 import multerConfig from './config/multer.cjs';
-import CreatePaymentIntentController from './app/controllers/stripe/CreatePaymentIntentController.js';
 
 const routes = new Router();
 
@@ -16,8 +16,8 @@ const upload = multer(multerConfig);
 
 routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
-
 routes.use(authMiddleware);
+routes.get('/session-verify', SessionController.verify);
 
 routes.post('/products', adminMiddleware, upload.single('file'), ProductController.store);
 routes.put('/products/:id', adminMiddleware, upload.single('file'), ProductController.update);

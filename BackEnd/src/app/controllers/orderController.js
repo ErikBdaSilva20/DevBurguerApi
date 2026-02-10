@@ -85,7 +85,7 @@ class OrderController {
           id: product.id,
           name: product.name,
           price: product.price,
-          url: product.url,
+          image: product.url,
           category: product.category.name,
           quantity,
         };

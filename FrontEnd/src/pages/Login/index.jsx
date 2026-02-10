@@ -2,12 +2,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import * as yup from 'yup';
 import BeerBurguerLogo from '../../assets/BeerBurguerLogo.png';
+import abstractBackground from '../../assets/abstractBackground.jpg';
+import formBackground from '../../assets/formBackground.jpg';
 import { Button } from '../../components/Button';
-import { useUser } from '../../hooks/userContext.jsx';
+import { useUser } from '../../hooks/UserContext.jsx';
 import api from '../../services/api.js';
 
+import * as yup from 'yup';
 import {
   Container,
   ContainerInputs,
@@ -49,8 +51,12 @@ export function Login() {
           pending: 'Verificando dados🎲',
           success: {
             render() {
-              navigate('/');
-              return 'Login realizado com sucesso!';
+              if (userData?.admin) {
+                navigate('/admin/produtos');
+              } else {
+                navigate('/');
+              }
+              return;
             },
           },
           error: 'Email ou senha incorretos',
@@ -58,8 +64,6 @@ export function Login() {
       );
 
       putUserData(userData);
-
-      console.log(response.userData);
     } catch (error) {
       console.error('Erro na solicitação', error);
     }
@@ -67,16 +71,16 @@ export function Login() {
 
   return (
     <Container>
-      <LeftContainer>
+      <LeftContainer $background={abstractBackground}>
         <img src={BeerBurguerLogo} alt="Logo do estabelecimento" className="Logo" />
       </LeftContainer>
 
-      <RightContainer>
+      <RightContainer $background={formBackground}>
         <Title>
           Olá seja bem-vindo ao
-          <span className="span1"> Beer Burguer</span>
+          <span> Beer Burguer</span>
           <br />
-          Entre com seu <span className="span2">login e senha!</span>
+          Entre com seu <span>login e senha!</span>
         </Title>
 
         <Form onSubmit={handleSubmit(onSubmit)}>
