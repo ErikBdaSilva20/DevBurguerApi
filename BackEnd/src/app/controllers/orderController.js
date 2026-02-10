@@ -94,7 +94,7 @@ class OrderController {
       const order = {
         user: { id: userId, name: userName },
         products: mapedProducts,
-        status: 'Pedido realizado com sucesso! Aguarde mais informações.',
+        status: 'Pedido realizado com sucesso!',
       };
 
       const newOrder = await Order.create(order);

@@ -64,12 +64,12 @@ export function CartProvider({ children }) {
   }
 
   function updateLocalStorage(cartProducts) {
-    localStorage.setItem('beerBurguer:carInfo', JSON.stringify(cartProducts));
+    localStorage.setItem('beerBurguer:cartInfo', JSON.stringify(cartProducts));
   }
 
   // Pegar informações do localstorage quando o carrinho abrir
   useEffect(() => {
-    const clientCartData = localStorage.getItem('beerBurguer:carInfo');
+    const clientCartData = localStorage.getItem('beerBurguer:cartInfo');
 
     if (clientCartData) {
       setCartProducts(JSON.parse(clientCartData));

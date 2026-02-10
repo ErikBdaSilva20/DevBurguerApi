@@ -8,10 +8,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import { createData, orderStatusOptions, Row } from './TableRow.jsx';
+import { createData, Row } from './TableRow.jsx';
 import api from '../../../services/api.js';
 
-import { SelectStatus } from './styles.js';
 export function Orders() {
   const [row, setRows] = useState([]);
 

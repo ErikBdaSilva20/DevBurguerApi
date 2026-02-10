@@ -5,6 +5,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import LogoImg from '../../assets/BeerBurguerLogo.png';
+import { useUser } from '../../hooks/UserContext';
 import { Container, Footer, Logo, NavLink } from './styles';
 
 const menuOptions = [
@@ -31,9 +32,10 @@ const menuOptions = [
 export function SideNavAdmin() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { logout } = useUser();
 
-  function logout() {
-    localStorage.removeItem('account:userData');
+  function handleLogout() {
+    logout();
     navigate('/login');
   }
 
@@ -49,7 +51,7 @@ export function SideNavAdmin() {
         ))}
       </div>
       <Footer>
-        <NavLink to="/login" onClick={logout}>
+        <NavLink to="/login" onClick={handleLogout}>
           <LogoutIcon className="icon" />
           Sair
         </NavLink>

@@ -17,8 +17,16 @@ import {
   Orders,
   Products,
 } from '../pages';
+import { PrivateRoute } from './PrivateRoute';
+import { useUser } from '../hooks/UserContext';
 
 export function Router() {
+  const { loading } = useUser();
+
+  if (loading) {
+    return <div>Carregando...</div>;
+  }
+
   return (
     <Routes>
       {/* User */}
@@ -31,11 +39,13 @@ export function Router() {
       </Route>
 
       {/* Admin */}
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route path="produtos" element={<Products />} />
-        <Route path="adicionar-produto" element={<NewProduct />} />
-        <Route path="editar-produto" element={<EditProduct />} />
-        <Route path="pedidos" element={<Orders />} />
+      <Route element={<PrivateRoute adminOnly />}>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="produtos" element={<Products />} />
+          <Route path="adicionar-produto" element={<NewProduct />} />
+          <Route path="editar-produto" element={<EditProduct />} />
+          <Route path="pedidos" element={<Orders />} />
+        </Route>
       </Route>
 
       {/* Auth */}

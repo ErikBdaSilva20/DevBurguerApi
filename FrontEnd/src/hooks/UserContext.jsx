@@ -8,24 +8,25 @@ export function UserProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   async function loadUser() {
+    const storedUser = localStorage.getItem('devburguer:userData');
+
+    if (!storedUser) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const { data } = await api.get('/session-verify');
       setUserInfo(data);
-    } catch {
-      setUserInfo(null);
-      localStorage.removeItem('devburguer:userData');
+    } catch (error) {
+      if (error.response?.status === 401) {
+        localStorage.removeItem('devburguer:userData');
+        setUserInfo(null);
+      }
     } finally {
       setLoading(false);
     }
   }
-
-  useEffect(() => {
-    const storedUserData = localStorage.getItem('devburguer:userData');
-    if (storedUserData) {
-      setUserInfo(JSON.parse(storedUserData));
-    }
-    loadUser();
-  }, []);
 
   function putUserData(user) {
     setUserInfo(user);
@@ -36,6 +37,10 @@ export function UserProvider({ children }) {
     setUserInfo(null);
     localStorage.removeItem('devburguer:userData');
   }
+
+  useEffect(() => {
+    loadUser();
+  }, []);
 
   return (
     <UserContext.Provider value={{ userInfo, loading, putUserData, logout }}>

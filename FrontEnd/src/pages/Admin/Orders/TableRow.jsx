@@ -1,5 +1,5 @@
-import * as React from 'react';
 import PropTypes from 'prop-types';
+import * as React from 'react';
 
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
@@ -13,9 +13,10 @@ import Typography from '@mui/material/Typography';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { SelectStatus } from './styles.js';
-import { formatPrice } from '../../../utils/formatPrice.js';
 import api from '../../../services/api.js';
+import { formatDate } from '../../../utils/formatDate.js';
+import { formatPrice } from '../../../utils/formatPrice.js';
+import { SelectStatus } from './styles.js';
 
 export function createData(order) {
   return {
@@ -29,7 +30,7 @@ export function createData(order) {
 
 async function newStatusOrder(orderId, newStatus) {
   try {
-    await api.put(`/orders/${orderId}/status`, { status: newStatus });
+    await api.put(`/orders/${orderId}`, { status: newStatus });
   } catch (error) {
     console.error('Erro ao atualizar status do pedido', error);
   }
@@ -59,13 +60,15 @@ export function Row({ row }) {
 
         <TableCell>{row.orderId}</TableCell>
         <TableCell>{row.name}</TableCell>
-        <TableCell>{new Date(row.date).toLocaleDateString('pt-BR')}</TableCell>
+        <TableCell>{formatDate(row.date)}</TableCell>
         <TableCell>
           <SelectStatus
-            options={orderStatusOptions.filter((status) => status.id !== 0)}
-            placeholder="status"
-            defaultValue={orderStatusOptions.find((status) => status.value === row.status)}
-            onChange={(status) => newStatusOrder(row.orderId, status.value)}
+            placeholder={row.status}
+            options={orderStatusOptions}
+            defaultValue={orderStatusOptions.find(
+              (option) => option.value === row.status || option.value === 0
+            )}
+            onChange={(e) => newStatusOrder(row.orderId, e.value)}
           />
         </TableCell>
       </TableRow>
