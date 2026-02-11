@@ -22,6 +22,7 @@ routes.get('/session-verify', SessionController.verify);
 routes.post('/products', adminMiddleware, upload.single('file'), ProductController.store);
 routes.put('/products/:id', adminMiddleware, upload.single('file'), ProductController.update);
 routes.get('/products', ProductController.index);
+routes.delete('/products/:id', adminMiddleware, ProductController.delete);
 
 routes.post('/categories', adminMiddleware, upload.single('file'), CategoryController.store);
 routes.put('/categories/:id', adminMiddleware, upload.single('file'), CategoryController.update);

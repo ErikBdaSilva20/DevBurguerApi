@@ -79,9 +79,15 @@ class ProductController {
       /* 🔹 VALIDAÇÃO DE DADOS */
       const schema = Yup.object({
         name: Yup.string().required('Nome é obrigatório'),
-        price: Yup.number().required('Preço é obrigatório'),
+        price: Yup.string()
+          .matches(/^\d{1,7}$/, 'Preço inválido')
+          .required('Preço é obrigatório'),
         category_id: Yup.string().required('Categoria é obrigatória'),
-        offer: Yup.boolean(),
+        offer: Yup.boolean().transform((value, originalValue) => {
+          if (originalValue === 'true') return true;
+          if (originalValue === 'false' || originalValue === undefined) return false;
+          return value;
+        }),
       });
 
       await schema.validate(req.body, { abortEarly: false });
@@ -133,7 +139,8 @@ class ProductController {
       /* 🔹 VALIDAÇÃO FLEXÍVEL */
       const schema = Yup.object({
         name: Yup.string(),
-        price: Yup.number(),
+        price: Yup.string().matches(/^\d{1,7}$/, 'Preço inválido'),
+
         category_id: Yup.string(),
         offer: Yup.boolean(),
       });
@@ -210,6 +217,35 @@ class ProductController {
       return res.status(500).json({
         message: 'Erro ao buscar produtos',
       });
+    }
+  }
+
+  /* ======================================================
+   🔹 DELETE — EXCLUIR PRODUTO
+====================================================== */
+  async delete(req, res) {
+    try {
+      const { id } = req.params;
+
+      // 🔹 BUSCA O PRODUTO
+      const product = await Product.findByPk(id);
+
+      if (!product) {
+        return res.status(404).json({ error: 'Produto não encontrado' });
+      }
+
+      // 🔹 REMOVE A IMAGEM DO SERVIDOR
+      if (product.path) {
+        deleteImage(product.path);
+      }
+
+      // 🔹 REMOVE DO BANCO
+      await product.destroy();
+
+      return res.status(200).json({ message: 'Produto excluído com sucesso' });
+    } catch (error) {
+      console.error('🔥 ERRO AO DELETAR PRODUTO:', error);
+      return res.status(500).json({ message: 'Erro interno ao excluir produto' });
     }
   }
 }
