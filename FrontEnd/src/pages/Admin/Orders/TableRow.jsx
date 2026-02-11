@@ -18,6 +18,18 @@ import { formatDate } from '../../../utils/formatDate.js';
 import { formatPrice } from '../../../utils/formatPrice.js';
 import { SelectStatus } from './styles.js';
 
+// Opções de status do pedido
+export const orderStatusOptions = [
+  { id: 0, value: 'Todos', label: 'Todos' },
+  { id: 1, value: 'Em preparação', label: 'Em preparação' },
+  { id: 2, value: 'Pedido Pronto', label: 'Pedido Pronto' },
+  { id: 3, value: 'Pedido a Caminho', label: 'Pedido a Caminho' },
+  { id: 4, value: 'Entregue', label: 'Entregue' },
+  { id: 5, value: 'Pedido Realizado', label: 'Pedido Realizado' },
+  { id: 6, value: 'Pedido cancelado', label: 'Pedido cancelado' },
+];
+
+// Função auxiliar para criar objeto de pedido
 export function createData(order) {
   return {
     orderId: order._id,
@@ -28,25 +40,29 @@ export function createData(order) {
   };
 }
 
-async function newStatusOrder(orderId, newStatus) {
-  try {
-    await api.put(`/orders/${orderId}`, { status: newStatus });
-  } catch (error) {
-    console.error('Erro ao atualizar status do pedido', error);
-  }
-}
-
-export const orderStatusOptions = [
-  { id: 0, value: 'Todos', label: 'Todos' },
-  { id: 1, value: 'Em preparação', label: 'Em preparação' },
-  { id: 2, value: 'Pedido Pronto', label: 'Pedido Pronto' },
-  { id: 3, value: 'Pedido a Caminho', label: 'Pedido a Caminho' },
-  { id: 4, value: 'Entregue', label: 'Entregue' },
-  { id: 5, value: 'Pedido Realizado', label: 'Pedido Realizado' },
-  { id: 6, value: 'Pedido cancelado', label: 'Pedido cancelado' },
-];
-export function Row({ row }) {
+// Componente da linha da tabela
+export function Row({ row, setOrders, orders }) {
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+
+  // Atualiza status do pedido
+  async function newStatusOrder(orderId, status) {
+    try {
+      setLoading(true);
+      await api.put(`/orders/${orderId}`, { status });
+
+      // Atualiza o estado local para refletir a mudança na UI
+      const updatedOrders = orders.map((order) =>
+        order.orderId === orderId ? { ...order, status } : order
+      );
+
+      setOrders(updatedOrders);
+    } catch (error) {
+      console.error('Erro ao atualizar status do pedido', error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <>
@@ -58,17 +74,26 @@ export function Row({ row }) {
           </IconButton>
         </TableCell>
 
-        <TableCell>{row.orderId}</TableCell>
-        <TableCell>{row.name}</TableCell>
-        <TableCell>{formatDate(row.date)}</TableCell>
+        <TableCell className="Tc">{row.orderId}</TableCell>
+        <TableCell className="TcName">{row.name}</TableCell>
+        <TableCell className="Tc">{formatDate(row.date)}</TableCell>
         <TableCell>
           <SelectStatus
-            placeholder={row.status}
-            options={orderStatusOptions}
-            defaultValue={orderStatusOptions.find(
-              (option) => option.value === row.status || option.value === 0
-            )}
+            options={orderStatusOptions.filter((option) => option.id !== 0)}
+            defaultValue={orderStatusOptions.find((option) => option.value === row.status)}
             onChange={(e) => newStatusOrder(row.orderId, e.value)}
+            placeholder={row.status}
+            isLoading={loading}
+            menuPortalTarget={document.body}
+            styles={{
+              menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+              control: (base) => ({
+                ...base,
+                border: 'none',
+                boxShadow: 'none',
+                backgroundColor: 'black',
+              }),
+            }}
           />
         </TableCell>
       </TableRow>
@@ -94,7 +119,7 @@ export function Row({ row }) {
 
                 <TableBody>
                   {row.products.map((product) => (
-                    <TableRow key={product.id}>
+                    <TableRow key={product.id || product._id}>
                       <TableCell>{product.name}</TableCell>
                       <TableCell>{product.quantity}</TableCell>
                       <TableCell>{formatPrice(product.price)}</TableCell>
@@ -111,7 +136,10 @@ export function Row({ row }) {
   );
 }
 
+// PropTypes corretos
 Row.propTypes = {
+  setOrders: PropTypes.func.isRequired,
+  orders: PropTypes.array.isRequired,
   row: PropTypes.shape({
     orderId: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
@@ -119,7 +147,8 @@ Row.propTypes = {
     status: PropTypes.string.isRequired,
     products: PropTypes.arrayOf(
       PropTypes.shape({
-        id: PropTypes.string.isRequired,
+        id: PropTypes.string,
+        _id: PropTypes.string,
         name: PropTypes.string.isRequired,
         price: PropTypes.number.isRequired,
         quantity: PropTypes.number.isRequired,

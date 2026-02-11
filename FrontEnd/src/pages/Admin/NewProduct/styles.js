@@ -1,112 +1,131 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  background: ${(props) => props.theme.background};
   min-height: 100vh;
-  padding: 2.5rem;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
 `;
 
-export const FormContainer = styled.form`
-  background: ${(props) => props.theme.mainBlack};
-  padding: 2.5rem;
-  border-radius: 12px;
+export const Form = styled.form`
   width: 100%;
-  max-width: 600px;
+  max-width: 520px;
+  background: ${({ theme }) => theme.secondBlack};
+  padding: 32px;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  gap: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+`;
+
+export const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 export const Label = styled.label`
-  color: ${(props) => props.theme.white};
-  font-size: 1rem;
-  font-weight: 500;
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.white};
+
+  svg {
+    font-size: 18px;
+    color: ${({ theme }) => theme.secondary};
+  }
 `;
 
 export const Input = styled.input`
-  height: 48px;
-  background: ${(props) => props.theme.secondBlack};
-  border: 1px solid ${(props) => props.theme.secondBlack};
+  padding: 12px 14px;
   border-radius: 8px;
-  padding: 0 16px;
-  color: ${(props) => props.theme.white};
-  font-size: 1rem;
-  transition: border-color 0.2s;
-
-  &:focus {
-    outline: none;
-    border-color: ${(props) => props.theme.primary};
-  }
+  border: 1px solid ${({ theme }) => theme.mainBlack};
+  background-color: ${({ theme }) => theme.mainBlack};
+  color: ${({ theme }) => theme.white};
+  font-size: 14px;
+  transition: all 0.2s ease;
 
   &::placeholder {
-    color: ${(props) => props.theme.textGray};
+    color: #999;
   }
-`;
-
-export const Select = styled.select`
-  height: 48px;
-  background: ${(props) => props.theme.secondBlack};
-  border: 1px solid ${(props) => props.theme.secondBlack};
-  border-radius: 8px;
-  padding: 0 16px;
-  color: ${(props) => props.theme.white};
-  font-size: 1rem;
-  cursor: pointer;
 
   &:focus {
     outline: none;
-    border-color: ${(props) => props.theme.primary};
+    border-color: ${({ theme }) => theme.secondary};
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.secondary}33;
   }
 `;
 
-export const UploadContainer = styled.label`
-  height: 120px;
-  border: 2px dashed ${(props) => props.theme.secondBlack};
-  border-radius: 8px;
+export const LabelUpload = styled.label`
+  height: 140px;
+  border-radius: 12px;
+  border: 2px dashed ${({ theme }) => theme.secondary};
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 8px;
   cursor: pointer;
-  color: ${(props) => props.theme.textGray};
-  transition: all 0.2s;
+  color: ${({ theme }) => theme.white};
+  background-color: ${({ theme }) => theme.mainBlack};
+  transition: all 0.3s ease;
 
-  &:hover {
-    border-color: ${(props) => props.theme.primary};
-    background: rgba(255, 238, 0, 0.05);
-    color: ${(props) => props.theme.primary};
+  svg {
+    font-size: 36px;
+    color: ${({ theme }) => theme.secondary};
   }
 
   input {
     display: none;
   }
-`;
 
-export const CheckboxLabel = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: ${(props) => props.theme.white};
-  cursor: pointer;
-  font-size: 1rem;
-
-  input {
-    width: 20px;
-    height: 20px;
-    accent-color: ${(props) => props.theme.primary};
+  &:hover {
+    background-color: ${({ theme }) => theme.secondBlack};
+    border-color: ${({ theme }) => theme.primary};
   }
 `;
 
-export const ErrorMessage = styled.p`
-  color: ${(props) => props.theme.danger};
-  font-size: 0.875rem;
-  margin-top: -1rem;
+export const Select = styled.select`
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.mainBlack};
+  background-color: ${({ theme }) => theme.mainBlack};
+  color: ${({ theme }) => theme.white};
+  font-size: 14px;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.secondary};
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.secondary}33;
+  }
+`;
+
+export const SubmitButton = styled.button`
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.secondary},
+    ${({ theme }) => theme.primary}
+  );
+  color: ${({ theme }) => theme.white};
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 `;

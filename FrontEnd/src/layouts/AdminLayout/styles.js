@@ -6,13 +6,18 @@ export const Container = styled.div`
 `;
 
 export const SideNav = styled.div``;
+
 export const Main = styled.main`
   display: flex;
   flex-direction: column;
   flex: 1;
   width: 100%;
   height: 100vh;
-  background-color: ${({ theme }) => theme.gray};
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.mainBlack} 0%,
+    ${({ theme }) => theme.secondBlack} 100%
+  );
 `;
 
 export const Section = styled.section`
@@ -20,4 +25,11 @@ export const Section = styled.section`
   padding: 40px 20px;
   max-width: 1200px;
   width: 100%;
+`;
+
+export const ErrorMessage = styled.span`
+  color: ${({ theme }) => theme.danger};
+  font-size: 15px;
+  margin-top: 4px;
+  font-weight: 600;
 `;
