@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.div`
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
@@ -132,6 +133,34 @@ export const SubmitButton = styled.button`
   &:hover {
     filter: brightness(1.1);
     transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+`;
+
+export const Deletion = styled.div``;
+
+export const DeleteButton = styled.button`
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #ff4d4d, #e60000);
+  color: ${({ theme }) => theme.white};
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  width: 500px;
+  max-width: 520px;
+
+  &:hover {
+    filter: brightness(1.6);
+    scale: calc(1.05);
+    transform: translateY(-4px);
   }
 
   &:active {

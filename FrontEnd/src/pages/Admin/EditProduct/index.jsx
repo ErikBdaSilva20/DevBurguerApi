@@ -16,6 +16,8 @@ import {
   SubmitButton,
   LabelUpload,
   Select,
+  Deletion,
+  DeleteButton,
 } from './styles.js';
 
 import { toast } from 'react-toastify';
@@ -30,10 +32,16 @@ import { ErrorMessage } from '../../../layouts/AdminLayout/styles.js';
 ========================= */
 
 const schema = Yup.object({
-  name: Yup.string().min(5, 'Mínimo de 5 caracteres').required('O nome do produto é obrigatório'),
-  price: Yup.number().positive('O preço deve ser positivo').required('O preço é obrigatório'),
+  name: Yup.string().min(4, 'Mínimo de 4 caracteres').required('O nome do produto é obrigatório'),
+  price: Yup.string()
+    .matches(/^\d{1,7}$/, 'Preço inválido')
+    .required('O preço é obrigatório'),
   category_id: Yup.string().required('A categoria é obrigatória'),
-  offer: Yup.bool(),
+  offer: Yup.boolean(),
+  file: Yup.mixed().test('fileType', 'Formato inválido', (value) => {
+    if (!value?.length) return true;
+    return ['image/png', 'image/jpeg', 'image/webp'].includes(value[0].type);
+  }),
 });
 
 /* =========================
@@ -58,38 +66,25 @@ export function EditProduct() {
     resolver: yupResolver(schema),
   });
 
-  useEffect(() => {
-    if (product) {
-      setValue('name', product.name);
-      setValue('price', product.price / 100);
-      setValue('category_id', product.category_id);
-    }
-  }, [product, setValue]);
   /* =========================
-     🔹 PROTEÇÃO (refresh)
-  ========================= */
+     🔹 PROTEÇÃO E PREENCHE FORM
+  ========================== */
 
   useEffect(() => {
     if (!product) {
       navigate('/admin/products');
+      return;
     }
-  }, [product, navigate]);
 
-  /* =========================
-     🔹 PREENCHE FORM
-  ========================= */
-
-  useEffect(() => {
-    if (product) {
-      setValue('name', product.name);
-      setValue('price', product.price / 100);
-      setValue('category_id', product.category_id);
-    }
-  }, [product, setValue]);
+    setValue('name', product.name);
+    setValue('price', (product.price / 100).toString());
+    setValue('category_id', product.category_id);
+    setValue('offer', !!product.offer);
+  }, [product, navigate, setValue]);
 
   /* =========================
      🔹 CARREGA CATEGORIAS
-  ========================= */
+  ========================== */
 
   useEffect(() => {
     async function loadCategories() {
@@ -106,16 +101,15 @@ export function EditProduct() {
 
   /* =========================
      🔹 SUBMIT
-  ========================= */
+  ========================== */
 
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
-
       formData.append('name', data.name);
-      formData.append('price', data.price * 100);
+      formData.append('price', Math.round(Number(data.price) * 100));
       formData.append('category_id', data.category_id);
-      formData.append('offer', data.offer);
+      formData.append('offer', data.offer ? 'true' : 'false');
 
       if (data.file?.length) {
         formData.append('file', data.file[0]);
@@ -127,12 +121,31 @@ export function EditProduct() {
         error: 'Erro ao atualizar produto.',
       });
 
-      setTimeout(() => {
-        navigate('/admin/produtos');
-      }, 2000);
+      setTimeout(() => navigate('/admin/produtos'), 2000);
     } catch (error) {
       console.error('Erro ao atualizar produto:', error);
       toast.error('Erro ao atualizar produto.');
+    }
+  };
+
+  /* =========================
+     🔹 DELETE
+  ========================== */
+
+  const handleDelete = async () => {
+    if (!window.confirm('Tem certeza que deseja excluir o produto?')) return;
+
+    try {
+      await toast.promise(api.delete(`/products/${product.id}`), {
+        pending: 'Excluindo produto...',
+        success: 'Produto excluído com sucesso!',
+        error: 'Erro ao excluir produto.',
+      });
+
+      navigate('/admin/produtos');
+    } catch (error) {
+      console.error('Erro ao excluir produto:', error);
+      toast.error('Erro ao excluir produto.');
     }
   };
 
@@ -140,7 +153,7 @@ export function EditProduct() {
 
   /* =========================
      🔹 JSX
-  ========================= */
+  ========================== */
 
   return (
     <Container>
@@ -148,10 +161,8 @@ export function EditProduct() {
         {/* NOME */}
         <InputGroup>
           <Label>
-            <LocalOfferIcon />
-            Nome do produto
+            <LocalOfferIcon /> Nome do produto
           </Label>
-
           <Input type="text" {...register('name')} />
           <ErrorMessage>{errors.name?.message}</ErrorMessage>
         </InputGroup>
@@ -159,20 +170,16 @@ export function EditProduct() {
         {/* PREÇO */}
         <InputGroup>
           <Label>
-            <AttachMoneyIcon />
-            Preço
+            <AttachMoneyIcon /> Preço
           </Label>
-
-          <Input type="number" step="0.01" {...register('price')} />
+          <Input type="text" inputMode="numeric" maxLength={7} {...register('price')} />
           <ErrorMessage>{errors.price?.message}</ErrorMessage>
         </InputGroup>
 
         {/* IMAGEM */}
         <InputGroup>
           <LabelUpload>
-            <ImageIcon />
-            <span>Enviar nova imagem (opcional)</span>
-
+            <ImageIcon /> Enviar nova imagem (opcional)
             <Input
               type="file"
               accept="image/png,image/jpeg,image/webp"
@@ -181,20 +188,16 @@ export function EditProduct() {
                 setFilename(e.target.files?.[0]?.name || null);
               }}
             />
-
             {filename || 'Nenhum arquivo selecionado'}
           </LabelUpload>
-
           <ErrorMessage>{errors.file?.message}</ErrorMessage>
         </InputGroup>
 
         {/* CATEGORIA */}
         <InputGroup>
           <Label>
-            <CategoryIcon />
-            Categoria
+            <CategoryIcon /> Categoria
           </Label>
-
           <Select {...register('category_id')}>
             <option value={String(product.category_id)}>{product.category?.name}</option>
             {categories.map((category) => (
@@ -203,10 +206,10 @@ export function EditProduct() {
               </option>
             ))}
           </Select>
-
           <ErrorMessage>{errors.category_id?.message}</ErrorMessage>
         </InputGroup>
 
+        {/* OFFER */}
         <InputGroup>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <input
@@ -221,6 +224,12 @@ export function EditProduct() {
 
         <SubmitButton type="submit">Salvar alterações</SubmitButton>
       </Form>
+
+      <Deletion>
+        <DeleteButton className="delete" type="button" onClick={handleDelete}>
+          Excluir produto
+        </DeleteButton>
+      </Deletion>
     </Container>
   );
 }
