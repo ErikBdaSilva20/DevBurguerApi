@@ -19,7 +19,7 @@ import {
   LeftContainer,
   RightContainer,
   Title,
-} from './styles';
+} from './styles.js';
 
 const schema = yup
   .object({
