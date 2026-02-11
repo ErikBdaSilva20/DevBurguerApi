@@ -5,15 +5,6 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  .checkbox {
-    width: 24px;
-    height: 24px;
-
-    accent-color: ${({ theme }) => theme.secondary};
-
-    cursor: pointer;
-  }
 `;
 
 export const Form = styled.form`
@@ -32,6 +23,15 @@ export const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  .checkbox {
+    width: 24px;
+    height: 24px;
+
+    accent-color: ${({ theme }) => theme.secondary};
+
+    cursor: pointer;
+  }
 `;
 
 export const Label = styled.label`

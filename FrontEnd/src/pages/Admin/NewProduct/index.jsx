@@ -19,6 +19,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { useEffect, useState } from 'react';
 import api from '../../../services/api.js';
 import { ErrorMessage } from '../../../layouts/AdminLayout/styles.js';
+import { useNavigate } from 'react-router-dom';
 
 /* =========================
    🔹 VALIDAÇÃO
@@ -28,6 +29,7 @@ const schema = Yup.object({
   name: Yup.string().min(5, 'Mínimo de 5 caracteres').required('O nome do produto é obrigatório'),
   price: Yup.number().positive('O preço deve ser positivo').required('O preço é obrigatório'),
   category_id: Yup.string().required('A categoria é obrigatória'),
+  offer: Yup.bool(),
   file: Yup.mixed()
     .required('A imagem é obrigatória')
     .test('fileExists', 'Arquivo inválido', (value) => {
@@ -48,6 +50,8 @@ const schema = Yup.object({
 export function NewProduct() {
   const [filename, setFilename] = useState(null);
   const [categories, setCategories] = useState([]);
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -80,18 +84,28 @@ export function NewProduct() {
   ========================= */
 
   const onSubmit = async (data) => {
-    const formData = new FormData();
+    try {
+      const formData = new FormData();
 
-    formData.append('name', data.name);
-    formData.append('price', data.price * 100);
-    formData.append('category_id', data.category_id);
-    formData.append('file', data.file[0]);
+      formData.append('name', data.name);
+      formData.append('price', data.price * 100);
+      formData.append('category_id', data.category_id);
+      formData.append('file', data.file[0]);
+      formData.append('offer', data.offer);
 
-    await toast.promise(api.post('/products', formData), {
-      pending: 'Adicionando produto...',
-      success: 'Produto adicionado com sucesso!',
-      error: 'Erro ao adicionar produto.',
-    });
+      await toast.promise(api.post('/products', formData), {
+        pending: 'Adicionando produto...',
+        success: 'Produto adicionado com sucesso!',
+        error: 'Erro ao adicionar produto.',
+      });
+
+      setTimeout(() => {
+        navigate('/admin/produtos');
+      }, 2000);
+    } catch (error) {
+      console.error('Erro ao adicionar produto:', error);
+      toast.error('Erro ao adicionar produto.');
+    }
   };
 
   /* =========================
@@ -155,6 +169,13 @@ export function NewProduct() {
           </Select>
 
           <ErrorMessage>{errors.category_id?.message}</ErrorMessage>
+        </InputGroup>
+
+        <InputGroup>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <input className="checkbox" type="checkbox" {...register('offer')} />
+            <Label>Produto em Oferta ?</Label>
+          </div>
         </InputGroup>
 
         <SubmitButton type="submit">Adicionar Produto</SubmitButton>
