@@ -2,16 +2,15 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const Container = styled.nav`
-  background: ${(props) => props.theme.mainBlack || '#1f1f1f'};
   width: 300px;
-  height: 100vh;
+  position: sticky; /* mantém fixo ao rolar */
+  top: 0; /* topo da tela */
+  height: 100vh; /* ocupa toda a altura da viewport */
+  background: ${({ theme }) => theme.mainBlack || '#1f1f1f'};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 20px 0;
-  position: sticky;
-  top: 0;
-  left: 0;
   box-shadow: 4px 0 10px rgba(0, 0, 0, 0.3);
 
   div {

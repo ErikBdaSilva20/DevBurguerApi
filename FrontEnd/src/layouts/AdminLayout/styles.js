@@ -1,18 +1,15 @@
 import styled from 'styled-components';
 export const Container = styled.div`
-  display: grid;
-  grid-template-columns: minmax(220px, 300px) 1fr;
-  height: 100vh;
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
 `;
 
-export const SideNav = styled.div``;
-
 export const Main = styled.main`
+  flex: 1;
   display: flex;
   flex-direction: column;
-  flex: 1;
-  width: 100%;
-  height: 100vh;
+  overflow-y: auto; /* faz o conteúdo rolar */
   background: linear-gradient(
     135deg,
     ${({ theme }) => theme.mainBlack} 0%,

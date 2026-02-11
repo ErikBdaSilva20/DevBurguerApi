@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,16 +9,14 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import { formatPrice } from '../../../utils/formatPrice';
-import { useNavigate } from 'react-router-dom';
 
-import { useEffect, useState } from 'react';
 import api from '../../../services/api';
-import { Container, NotOfferIcon, OfferIcon, ProductImage } from './styles';
+import { formatPrice } from '../../../utils/formatPrice';
+
+import { Container, ProductImage, OfferIcon, NotOfferIcon } from './styles.js';
 
 export function Products() {
   const [products, setProducts] = useState([]);
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,46 +34,43 @@ export function Products() {
 
   function editProduct(product) {
     navigate(`/admin/editar-produto`, { state: { product } });
-
-    console.log(product);
   }
 
   return (
     <Container>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table aria-label="Tabela de produtos" sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
+              <TableCell align="center">Produto</TableCell>
               <TableCell align="center">Preço</TableCell>
-              <TableCell align="center">Produto em oferta</TableCell>
-              <TableCell align="center"></TableCell>
-
-              <TableCell align="center">Imagem do produto</TableCell>
-              <TableCell align="center">Id do produto</TableCell>
-
-              <TableCell align="center">Editar item</TableCell>
+              <TableCell align="center">Oferta</TableCell>
+              <TableCell align="center">Imagem</TableCell>
+              <TableCell align="center">Categoria ID</TableCell>
+              <TableCell align="center">Editar</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {products.map((products) => (
-              <TableRow
-                key={products.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell component="th" scope="products" align="center">
-                  {products.name}
-                </TableCell>
-                <TableCell align="center">{formatPrice(products.price)}</TableCell>
-                <TableCell align="center">
-                  {products.offer ? <OfferIcon /> : <NotOfferIcon />}
-                </TableCell>
 
+          <TableBody>
+            {products.map((product) => (
+              <TableRow
+                key={product.id}
+                sx={{
+                  '&:last-child td, &:last-child th': { border: 0 },
+                  '&:hover': { backgroundColor: '#2a2a2a' },
+                }}
+              >
+                <TableCell align="center">{product.name}</TableCell>
+                <TableCell align="center">{formatPrice(product.price)}</TableCell>
                 <TableCell align="center">
-                  <ProductImage src={products.url} alt={products.name} />
+                  {product.offer ? <OfferIcon /> : <NotOfferIcon />}
                 </TableCell>
-                <TableCell align="center">{products.category_id}</TableCell>
                 <TableCell align="center">
-                  <ModeEditIcon className="icon" onClick={() => editProduct(products)} />
+                  <ProductImage src={product.url} alt={product.name} />
+                </TableCell>
+                <TableCell align="center">{product.category_id}</TableCell>
+                <TableCell align="center">
+                  <ModeEditIcon className="icon" onClick={() => editProduct(product)} />
                 </TableCell>
               </TableRow>
             ))}

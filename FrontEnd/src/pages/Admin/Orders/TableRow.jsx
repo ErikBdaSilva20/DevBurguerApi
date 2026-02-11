@@ -69,7 +69,7 @@ export function Row({ row, setOrders, orders }) {
       {/* Linha principal */}
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell>
-          <IconButton size="small" onClick={() => setOpen(!open)}>
+          <IconButton className="Tr" size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
@@ -85,15 +85,7 @@ export function Row({ row, setOrders, orders }) {
             placeholder={row.status}
             isLoading={loading}
             menuPortalTarget={document.body}
-            styles={{
-              menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-              control: (base) => ({
-                ...base,
-                border: 'none',
-                boxShadow: 'none',
-                backgroundColor: 'black',
-              }),
-            }}
+            styles={SelectStatus.styles}
           />
         </TableCell>
       </TableRow>
@@ -103,27 +95,29 @@ export function Row({ row, setOrders, orders }) {
         <TableCell colSpan={5} sx={{ paddingBottom: 0, paddingTop: 0 }}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 2 }}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" gutterBottom className="Tc">
                 Detalhes do pedido
               </Typography>
 
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Produto</TableCell>
-                    <TableCell>Quantidade</TableCell>
-                    <TableCell>Preço</TableCell>
-                    <TableCell>Total</TableCell>
+                    <TableCell className="Tc">Produto</TableCell>
+                    <TableCell className="Tc">Quantidade</TableCell>
+                    <TableCell className="Tc">Preço</TableCell>
+                    <TableCell className="Tc">Total</TableCell>
                   </TableRow>
                 </TableHead>
 
                 <TableBody>
                   {row.products.map((product) => (
                     <TableRow key={product.id || product._id}>
-                      <TableCell>{product.name}</TableCell>
-                      <TableCell>{product.quantity}</TableCell>
-                      <TableCell>{formatPrice(product.price)}</TableCell>
-                      <TableCell>{formatPrice(product.price * product.quantity)}</TableCell>
+                      <TableCell className="Tc">{product.name}</TableCell>
+                      <TableCell className="Tc">{product.quantity}</TableCell>
+                      <TableCell className="Tc">{formatPrice(product.price)}</TableCell>
+                      <TableCell className="Tc">
+                        {formatPrice(product.price * product.quantity)}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

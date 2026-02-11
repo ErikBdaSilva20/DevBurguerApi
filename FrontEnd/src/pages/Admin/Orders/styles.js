@@ -1,3 +1,4 @@
+// styles.js
 import styled from 'styled-components';
 import Select from 'react-select';
 
@@ -14,6 +15,10 @@ export const Container = styled.div`
     font-weight: 500;
   }
 
+  .Tr {
+    color: ${({ theme }) => theme.primary};
+  }
+
   .TcName {
     color: ${({ theme }) => theme.secondary};
     font-weight: bold;
@@ -21,7 +26,6 @@ export const Container = styled.div`
   }
 `;
 
-// Container do grupo de botões
 export const SelectProductsByFilter = styled.div`
   width: 100%;
   display: flex;
@@ -39,7 +43,6 @@ export const SelectProductsByFilter = styled.div`
   }
 `;
 
-// Botões de status
 export const SelectButton = styled.button`
   border: none;
   padding: 8px 20px;
@@ -67,34 +70,48 @@ export const SelectButton = styled.button`
   }
 `;
 
-export const SelectStatus = styled(Select)`
-  width: 240px;
-`;
-
-export const customSelectStyles = {
-  control: (provided, state) => ({
-    ...provided,
-    backgroundColor: '#1a1a1a', // cor do select fechado
-    border: '1px solid #444',
-    color: '#fff',
-  }),
-  singleValue: (provided) => ({
-    ...provided,
-    color: '#fff', // cor do texto selecionado
-  }),
-  menu: (provided) => ({
-    ...provided,
-    backgroundColor: 'rgba(0, 0, 0, 0)', // fundo do dropdown
-    color: '#fff',
-  }),
-  option: (provided, state) => ({
-    ...provided,
-    backgroundColor: state.isSelected ? '#ff8800' : state.isFocused ? '#333' : '#1a1a1a',
-    color: state.isSelected ? '#000' : '#fff',
-    cursor: 'pointer',
-  }),
-  placeholder: (provided) => ({
-    ...provided,
-    color: '#aaa',
-  }),
-};
+// Select usado na tabela e nos detalhes do pedido
+export const SelectStatus = styled(Select).attrs({
+  styles: {
+    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+    control: (provided, state) => ({
+      ...provided,
+      backgroundColor: '#222',
+      border: '1px solid #555',
+      borderRadius: '6px',
+      boxShadow: state.isFocused ? '0 0 0 2px #ff8c05' : 'none',
+      '&:hover': { borderColor: '#ff8c05' },
+      color: '#fff',
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: '#fff',
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: '#aaa',
+    }),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: '#222',
+      borderRadius: '6px',
+      marginTop: 4,
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? '#ff8c05' : state.isFocused ? '#333' : '#222',
+      color: state.isSelected ? '#000' : '#fff',
+      cursor: 'pointer',
+      padding: '10px 12px',
+    }),
+    dropdownIndicator: (provided) => ({
+      ...provided,
+      color: '#fff',
+      '&:hover': { color: '#ff8c05' },
+    }),
+    indicatorSeparator: (provided) => ({
+      ...provided,
+      backgroundColor: '#555',
+    }),
+  },
+})``;
