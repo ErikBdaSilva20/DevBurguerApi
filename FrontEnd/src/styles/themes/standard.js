@@ -2,6 +2,8 @@ export const standardTheme = {
   primary: '#ffee00',
   secondary: '#ff8c05',
   success: '#61a120',
+  lime: '#80ff00',
+
   danger: '#ff3205',
 
   white: '#ffffff',
@@ -10,7 +12,7 @@ export const standardTheme = {
 
   gray: '#363636',
   mainBlack: '#000000',
-  secondBlack: '#484848',
+  secondBlack: '#2b2b2b',
 
   darkGray: '#625e5e',
   lightGray: '#cdcdcd',
